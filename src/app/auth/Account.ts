@@ -1,17 +1,19 @@
-import { Entity, OneToOne, Column, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
-import { ObjectType, Field } from 'type-graphql';
 import argon2 from 'argon2';
+import Jwt from 'jsonwebtoken';
+import { PrimaryColumn, Entity, OneToOne, Column, JoinColumn } from 'typeorm';
+import { ObjectType, Field } from 'type-graphql';
 
 import { User } from '../user';
+
 
 @Entity()
 @ObjectType()
 export class Account {
-  @PrimaryGeneratedColumn('uuid')
-  id!: string;
+  @PrimaryColumn({ name: 'id' })
+  id!: number;
 
-  @OneToOne(() => User)
-  @JoinColumn()
+  @OneToOne(() => User, { primary: true })
+  @JoinColumn({ name: 'id' })
   user: User;
 
   @Field()
@@ -23,7 +25,7 @@ export class Account {
 
   constructor(user: User, email: string) {
     this.user = user;
-    this.email = email.trim().toLowerCase();
+    this.email = email?.trim()?.toLowerCase(); // elvis operator is necessary for TypeORM
 
     this.password = ''; // Must be hashed
   }
@@ -34,5 +36,15 @@ export class Account {
 
   async isPasswordCorrect(password: string) {
     return await argon2.verify(this.password, password);
+  }
+
+  get jwt() {
+    const payload = {
+      id: this.id,
+      email: this.email,
+    }
+    return Jwt.sign(payload, process.env.JWT_SECRET!, {
+      expiresIn: '15m'
+    })
   }
 }
