@@ -6,6 +6,15 @@ import { Strategy as JwtStrategy, StrategyOptions as JwtOptions, ExtractJwt } fr
 
 import { AccountRepository } from './AccountRepository';
 
+declare global {
+  namespace Express {
+    interface User {
+      id: number;
+      email: string;
+      jwt: string;
+    }
+  }
+}
 const opts: JwtOptions = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET,
@@ -15,9 +24,36 @@ export function setupPassport(app: Application) {
   const accRepo = Container.get(AccountRepository);
 
   passport.use(new JwtStrategy(opts, async (jwt, done) => {
-    
+    try {
+      const account = await accRepo.findOne(jwt.id);
+      done(null, account)
+    } catch (error) {
+      done(error)
+    }
   }));
-  passport.use(new LocalStrategy((username, password, done) => {
 
-  }))
+  async function localStrategy(username: string, password: string) {
+    const account = await accRepo.findByEmailOrName(username);
+    if (account === undefined) {
+      throw new Error('User not found');
+    }
+    if (await account.isPasswordCorrect(password)) {
+      return account;
+    }
+    throw new Error('Password is incorrect');
+  }
+
+  passport.use(new LocalStrategy(async (username, password, done) => {
+    localStrategy(username, password)
+    .then(account => done(null, account))
+    .catch(done);
+  }));
+
+  app.post('/auth/login', passport.authenticate('local', {
+    session: false,
+  }), (req, res) => {
+    res.json({
+      accessToken: req.user!.jwt
+    });
+  })
 }
