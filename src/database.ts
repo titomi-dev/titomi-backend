@@ -1,7 +1,12 @@
-import { createConnection } from "typeorm";
+import { createConnection, useContainer } from "typeorm";
+import { Container } from "typedi";
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+
 import { entities } from "./app";
 
 export function connectDatabase() {
+  useContainer(Container);
+
   return createConnection({
     type: 'postgres',
     host: process.env.PG_HOST,
@@ -11,5 +16,6 @@ export function connectDatabase() {
     database: process.env.PG_NAME,
 
     entities,
+    namingStrategy: new SnakeNamingStrategy(),
   });
 }

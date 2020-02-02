@@ -10,6 +10,13 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     /* Advanced Options */
-    "forceConsistentCasingInFileNames": true
-  }
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true
+  },
+  "include": [
+    "src/**/*",
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

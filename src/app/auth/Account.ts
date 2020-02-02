@@ -1,4 +1,4 @@
-import { Entity, OneToOne } from 'typeorm';
+import { Entity, OneToOne, Column, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 import { ObjectType, Field } from 'type-graphql';
 import argon2 from 'argon2';
 
@@ -7,18 +7,23 @@ import { User } from '../user';
 @Entity()
 @ObjectType()
 export class Account {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
+
   @OneToOne(() => User)
+  @JoinColumn()
   user: User;
 
   @Field()
+  @Column()
   email: string;
 
-  @Field()
+  @Column()
   password: string;
 
   constructor(user: User, email: string) {
     this.user = user;
-    this.email = email;
+    this.email = email.trim().toLowerCase();
 
     this.password = ''; // Must be hashed
   }
