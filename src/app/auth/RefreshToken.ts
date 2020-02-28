@@ -20,11 +20,12 @@ export class RefreshToken {
   @PrimaryColumn()
   id!: number;
 
-  @Column()
-  @Index()
+  @Column({ unique: true })
   token!: string;
 
-  @ManyToOne(() => Account)
+  @ManyToOne(() => Account, {
+    eager: true,
+  })
   account!: Account;
 
   async update() {
