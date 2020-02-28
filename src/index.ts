@@ -13,6 +13,7 @@ import { resolvers } from './app';
 import { connectDatabase } from "./database";
 import { logger } from "./logger";
 import { setupPassport } from "./app/auth/passport";
+import { AdvancedConsoleLogger } from "typeorm";
 
 async function setupGraphQL(app: express.Application) {
   const schema = await buildSchema({

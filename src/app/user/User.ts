@@ -1,10 +1,11 @@
-import { Field, ObjectType } from "type-graphql";
+import { Field, ObjectType, ID } from "type-graphql";
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
 @ObjectType()
 export class User {
   @PrimaryGeneratedColumn()
+  @Field(() => ID)
   id!: number;
 
   @Field()

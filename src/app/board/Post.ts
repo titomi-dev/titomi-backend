@@ -1,5 +1,5 @@
 import { PrimaryGeneratedColumn, Entity, Column, ManyToOne } from "typeorm";
-import { ObjectType, Field } from "type-graphql";
+import { ObjectType, Field, ID } from "type-graphql";
 import { User } from "../user";
 import { Postable } from "./Postable";
 
@@ -7,7 +7,7 @@ import { Postable } from "./Postable";
 @ObjectType()
 export class Post extends Postable {
   @PrimaryGeneratedColumn()
-  @Field()
+  @Field(() => ID)
   id!: number;
 
   @Column()

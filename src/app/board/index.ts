@@ -2,7 +2,7 @@ import { Board } from "./Board"
 import { Message } from "./Message"
 import { Post } from "./Post"
 
-export default {
+export {
   Board,
   Message,
   Post,
