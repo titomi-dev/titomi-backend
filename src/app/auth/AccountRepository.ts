@@ -1,7 +1,8 @@
-import { Repository } from 'typeorm';
+import { Repository, EntityRepository } from 'typeorm';
 
 import { Account } from './Account';
 
+@EntityRepository(Account)
 export class AccountRepository extends Repository<Account> {
   async findByEmailOrName(emailOrName: string) {
     if (emailOrName.includes('@')) {

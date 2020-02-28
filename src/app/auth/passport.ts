@@ -1,4 +1,4 @@
-import { Application } from 'express';
+import { Application, json } from 'express';
 import { Container } from 'typedi';
 import passport from 'passport';
 import { Strategy as LocalStrategy } from 'passport-local';
@@ -23,6 +23,7 @@ const opts: JwtOptions = {
 export function setupPassport(app: Application) {
   const accRepo = Container.get(AccountRepository);
 
+  // JWT Handler
   passport.use(new JwtStrategy(opts, async (jwt, done) => {
     try {
       const account = await accRepo.findOne(jwt.id);
@@ -43,17 +44,30 @@ export function setupPassport(app: Application) {
     throw new Error('Password is incorrect');
   }
 
-  passport.use(new LocalStrategy(async (username, password, done) => {
+  passport.use(new LocalStrategy((username, password, done) => {
     localStrategy(username, password)
     .then(account => done(null, account))
     .catch(done);
   }));
 
+  // The endpoint for login
   app.post('/auth/login', passport.authenticate('local', {
     session: false,
   }), (req, res) => {
     res.json({
       accessToken: req.user!.jwt
     });
+  })
+
+  // TODO
+  app.post('/auth/refresh', async (req, res) => {
+    const { refreshToken } = req.body;
+
+    const user = await accRepo.findOne(1)
+
+    res.json({
+      accessToken: '',
+      refreshToken: '',
+    })
   })
 }

@@ -4449,6 +4449,11 @@ saxes@^3.1.9:
   dependencies:
     xmlchars "^2.1.1"
 
+secure-random-string@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/secure-random-string/-/secure-random-string-1.1.2.tgz#9cade0678acff7eeaf4517d110ea29e66530ebdc"
+  integrity sha512-o5aaoY4mEh209vOmt4wkUMF/uxGJV87ImeQdv1BnVQ7TOjemUiT6xgED3VpHTGz2AlmMfqBxS8C+UMZAxSOATA==
+
 semver@4.3.2:
   version "4.3.2"
   resolved "https://registry.yarnpkg.com/semver/-/semver-4.3.2.tgz#c7a07158a80bedd052355b770d82d6640f803be7"

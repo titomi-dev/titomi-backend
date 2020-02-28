@@ -1,6 +1,6 @@
 import argon2 from 'argon2';
 import Jwt from 'jsonwebtoken';
-import { PrimaryColumn, Entity, OneToOne, Column, JoinColumn } from 'typeorm';
+import { PrimaryColumn, Entity, OneToOne, Column, JoinColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { ObjectType, Field } from 'type-graphql';
 
 import { User } from '../user';
@@ -9,7 +9,7 @@ import { User } from '../user';
 @Entity()
 @ObjectType()
 export class Account {
-  @PrimaryColumn({ name: 'id' })
+  @PrimaryGeneratedColumn({ name: 'id' })
   id!: number;
 
   @OneToOne(() => User, { primary: true })

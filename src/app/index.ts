@@ -1,8 +1,9 @@
-import { Account } from './auth';
+import { Account, RefreshToken } from './auth';
 import { User, UserResolver } from './user';
 
 export const entities = [
   Account,
+  RefreshToken,
   User,
 ]
 
