@@ -25,8 +25,8 @@ export class Account {
 
   constructor(user: User, email: string) {
     this.user = user;
-    this.email = email?.trim()?.toLowerCase(); // elvis operator is necessary for TypeORM
-
+    // elvis operator is necessary for TypeORM
+    this.email = email?.trim()?.toLowerCase();
     this.password = ''; // Must be hashed
   }
 

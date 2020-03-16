@@ -9,7 +9,7 @@ interface LoginPayload {
   password: string
 }
 
-@Controller()
+@Controller("/auth")
 export class AuthController {
 
   constructor(
@@ -19,7 +19,7 @@ export class AuthController {
     private refRepo: Repository<RefreshToken>,
   ) {}
 
-  @Post()
+  @Post("/login")
   async login(@Body() body: LoginPayload) {
     const acc = await this.accRepo.findByEmailOrName(body.email);
     if (acc === undefined) {
@@ -36,7 +36,12 @@ export class AuthController {
     throw new UnauthorizedError('Incorrect password');
   }
 
-  @Post()
+  @Post("/register")
+  async register() {
+
+  }
+
+  @Post("/refresh")
   async refresh(@Body() { refreshToken }: { refreshToken: string }) {
     const ref = await this.refRepo.findOne({ token: refreshToken });
     if (ref === undefined) {
